@@ -2,11 +2,6 @@
 ##
 
 import traceback
-@app.errorhandler(500)
-def internal_error(exception):
-   return "<pre>"+traceback.format_exc()+"</pre>"
-
-
 from flask import Flask, request, render_template, jsonify
 import json
 import requests
@@ -59,6 +54,7 @@ def register_command():
         print("Error creating channel: "+str(response.status_code))
         print(response.text)
         return
+
 
 def check_authorization(request):
     global CHANNEL_AUTHKEY
@@ -177,6 +173,11 @@ def save_messages(messages):
     global CHANNEL_FILE
     with open(CHANNEL_FILE, 'w') as f:
         json.dump(messages, f)
+
+@app.errorhandler(500)
+def internal_error(exception):
+   return "<pre>"+traceback.format_exc()+"</pre>"
+
 
 # Start development web server
 # run flask --app channel.py register
