@@ -1,6 +1,12 @@
 ## channel.py - a simple message channel
 ##
 
+import traceback
+@app.errorhandler(500)
+def internal_error(exception):
+   return "<pre>"+traceback.format_exc()+"</pre>"
+
+
 from flask import Flask, request, render_template, jsonify
 import json
 import requests
@@ -17,7 +23,7 @@ class ConfigClass(object):
 app = Flask(__name__)
 app.config.from_object(__name__ + '.ConfigClass')  # configuration
 app.app_context().push()  # create an app context before initializing db
-
+"""for the server hub:"""
 HUB_URL = 'http://vm146.rz.uni-osnabrueck.de/hub'
 HUB_AUTHKEY = '12Crr-K24d-2N'
 CHANNEL_AUTHKEY = '0987654321'
@@ -25,6 +31,16 @@ CHANNEL_NAME = "THE Creative Insults"
 CHANNEL_ENDPOINT = "http://vm146.rz.uni-osnabrueck.de/u008/task_3/channel.wsgi" # don't forget to adjust in the bottom of the file
 CHANNEL_FILE = 'messages.json'
 CHANNEL_TYPE_OF_SERVICE = 'aiweb24:chat'
+
+"""for the local hub:"""
+# HUB_URL = 'http://localhost:5555'
+# HUB_AUTHKEY = '1234567890'
+# CHANNEL_AUTHKEY = '0987654321'
+# CHANNEL_NAME = "THE Creative Insults"
+# CHANNEL_ENDPOINT = "http://localhost:5001" # don't forget to adjust in the bottom of the file
+# CHANNEL_FILE = 'messages.json'
+# CHANNEL_TYPE_OF_SERVICE = 'aiweb24:chat'
+
 
 @app.cli.command('register')
 def register_command():
